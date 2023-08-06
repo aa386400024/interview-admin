@@ -67,6 +67,11 @@
 			"name": "用户管理",
 			"icon": "vk-icon-myfill",
 			"url": "/pages/user/list"
+		},{
+			"menu_id": "my_system-iv-question-manager",
+			"name": "面试题库",
+			"icon": "vk-icon-text",
+			"url": "/pages/iv-question-manager/list"
 		}]
 	}
 ]

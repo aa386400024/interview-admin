@@ -9,7 +9,8 @@
 				"navigationBarTitleText": "登录"
 			}
 		},
-		{ "path": "pages/user/list" }
+		{ "path": "pages/user/list" },
+		{ "path": "pages/iv-question-manager/list" }
 	],
 	"subPackages": [{
 			"root": "pages_plugs",
