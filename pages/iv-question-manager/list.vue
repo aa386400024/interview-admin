@@ -223,8 +223,8 @@
 						"skills": [],
 						"level": "beginner",
 						"video_file": null,
-						"vedio_character": "xiaojin",
-						"vedio_language": "zh"
+						"video_character": "xiaojin",
+						"video_language": "zh"
 					},
 					// 表单属性
 					props: {
@@ -313,7 +313,7 @@
 							"clearable": true,
 							"showLabel": true
 						}, {
-							"key": "vedio_character",
+							"key": "video_character",
 							"title": "视频角色",
 							"type": "select",
 							"placeholder": "请选择视频角色",
@@ -327,7 +327,7 @@
 								"value": "xiaocheng"
 							}]
 						}, {
-							"key": "vedio_language",
+							"key": "video_language",
 							"title": "视频语言",
 							"type": "select",
 							"placeholder": "请选择视频语言",
@@ -373,12 +373,12 @@
 								"message": "视频标题不能为空",
 								"trigger": "change"
 							}],
-							"vedio_character": [{
+							"video_character": [{
 								"required": true,
 								"message": "视频角色不能为空",
 								"trigger": "change"
 							}],
-							"vedio_language": [{
+							"video_language": [{
 								"required": true,
 								"message": "视频语言不能为空",
 								"trigger": "change"
