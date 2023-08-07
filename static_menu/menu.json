@@ -72,6 +72,11 @@
 			"name": "面试题库",
 			"icon": "vk-icon-text",
 			"url": "/pages/iv-question-manager/list"
+		},{
+			"menu_id": "my_system-iv-industries-manager",
+			"name": "行业管理",
+			"icon": "vk-icon-text",
+			"url": "/pages/iv-industries-manager/list"
 		}]
 	}
 ]
