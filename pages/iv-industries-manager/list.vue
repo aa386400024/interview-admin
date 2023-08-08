@@ -1,6 +1,16 @@
 <template>
 	<view class="page-body">
 		<!-- 页面内容开始 -->
+		<!-- 职位弹窗 -->
+		<vk-data-dialog 
+		    v-model="isPositionsDialogVisible" 
+		    title="职位列表" 
+		    width="60%">
+		    <vk-data-table
+		        :data="selectedPositions"
+		        :columns="positionTable.columns">
+		    </vk-data-table>
+		</vk-data-dialog>
 
 		<!-- 表格搜索组件开始 -->
 		<vk-data-table-query v-model="queryForm1.formData" :columns="queryForm1.columns"
@@ -41,8 +51,8 @@
 		<!-- 自定义按钮区域结束 -->
 
 		<!-- 表格组件开始 -->
-		<vk-data-table 
-			ref="table1" 
+		<vk-data-table
+			ref="table1"
 			:action="table1.action" 
 			:columns="table1.columns" 
 			:query-form-param="queryForm1"
@@ -98,11 +108,55 @@
 		data() {
 			// 页面数据变量
 			return {
+				selectedPositions: [], // 用于存储当前选中的职位列表
+				isPositionsDialogVisible: false, // 控制职位对话框的显示/隐藏
 				// 页面是否请求中或加载中
 				loading: false,
 				// init请求返回的数据
 				data: {
 
+				},
+				positionTable: {
+					columns: [
+						{
+							key: "name",
+							title: "职位名称",
+							type: "text"
+						},
+						{
+							key: "name_en",
+							title: "职位英文名称",
+							type: "text"
+						},
+						{
+							key: "position_id",
+							title: "职位ID",
+							type: "text"
+						},
+						{
+							key: "interviewed_count",
+							title: "面试次数",
+							type: "text"
+						},
+						{
+							key: "requires_proficiency",
+							title: "技能熟练度要求",
+							type: "text",
+							formatter: (val, row, column, index) => {
+								const text = val ? '需要' : '不需要'
+								return text;
+							}
+						},
+						{
+							key: "requires_skills",
+							title: "技能要求",
+							type: "text",
+							formatter: (val, row, column, index) => {
+								const text = val ? '需要' : '不需要'
+								return text;
+							}
+						},
+					]
 				},
 				// 表格相关开始 -----------------------------------------------------------
 				table1: {
@@ -116,29 +170,66 @@
 							width: 200
 						},
 						{
-							key: "industry_name",
+							key: "name",
 							title: "行业名称",
 							type: "text",
-							width: 200
+							width: 120
 						},
 						{
 							key: "name_en",
 							title: "行业英文名称",
 							type: "text",
-							width: 200
+							width: 120
 						},
 						{
 							key: "industry_id",
 							title: "行业ID",
 							type: "text",
-							width: 200
+						},
+						{
+							key: "icon",
+							title: "图标",
+							type: "icon",
+						},
+						{
+						  key: "positions",
+						  title: "职位",
+						  type: "text",
+						  formatter: (val, row, column, index) => {
+						    return ""; // 返回空字符串，这样原始数据就不会显示
+						  },
+						  buttonsPosition: "right",
+						  buttons: [
+						    {
+						      title: "查看职位",
+						      type: "text",
+						      mode: "default",
+						      show: ["row"],
+						      click: (options) => {
+						        this.selectedPositions = options.value;
+						        this.isPositionsDialogVisible = true;
+						      }
+						    }
+						  ]
+						},
+						{ 
+							key: "badge", 
+							title: "徽标 / 红点", 
+							type: "html",
+							width: 180,
+							formatter: (val, row, column, index) => {
+								const badgeVal = val.value ? val.value : '未设置'
+								const isDot = val.isDot ? val.isDot : '未设置'
+								let str = `<text>${badgeVal} / ${isDot}</text>`;
+								return str;
+							}
 						},
 						{
 							key: "description",
 							title: "行业描述",
 							type: "text",
 							defaultValue: '未设置'
-						}
+						},
 					],
 					// 多选框选中的值
 					multipleSelection: [],
@@ -163,7 +254,7 @@
 								mode: "="
 							},
 							{
-								key: "industry_name",
+								key: "name",
 								title: "行业名称",
 								type: "text",
 								width: 140,
@@ -183,7 +274,7 @@
 					// 表单请求数据，此处可以设置默认值
 					data: {
 						"industry_id": "",
-						"industry_name": "",
+						"name": "",
 						"description": "",
 						"name_en": "",
 						"icon": "",
@@ -202,7 +293,7 @@
 							"disabled": true,
 							"showLabel": true
 						}, {
-							"key": "industry_name",
+							"key": "name",
 							"title": "行业名称",
 							"type": "text",
 							"placeholder": "请输入行业名称",
@@ -237,9 +328,9 @@
 							"showLabel": true
 						},  {
 							"key": "industry",
-							"title": "是否新消息",
+							"title": "徽标显示",
 							"type": "select",
-							"placeholder": "请选择是否新消息",
+							"placeholder": "请选择是否徽标显示",
 							"clearable": true,
 							"showLabel": true,
 							"data": [{
@@ -252,7 +343,7 @@
 						}],
 						// 表单验证规则
 						rules: {
-							"industry_name": [{
+							"name": [{
 								"required": true,
 								"message": "行业名称不能为空",
 								"trigger": "change"
@@ -372,6 +463,10 @@
 					default:
 						break;
 				}
+			},
+			showPositions(index) {
+			    this.selectedPositions = this.table1.columns[index].positions;
+			    this.isPositionsDialogVisible = true;
 			}
 		},
 		// 监听属性
