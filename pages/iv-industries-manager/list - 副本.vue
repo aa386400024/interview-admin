@@ -283,6 +283,8 @@
 						"icon": "",
 						"keywords": [],
 						"industry": false,
+						"badge_type": 'none',
+						"badge_number": 1
 					},
 					// 表单属性
 					props: {
@@ -333,7 +335,26 @@
 								{ "label": "红点", "value": "dot" },
 								{ "label": "数字", "value": "number" }
 							]
+						},{
+							"key": "badge_type",
+							"title": "徽标类型",
+							"type": "select",
+							"data": [
+								{ "label": "无", "value": "none" },
+								{ "label": "红点", "value": "dot" },
+								{ "label": "数字", "value": "number" }
+							]
+						},{
+							key: "badge_number",
+							title: "徽标数字",
+							type: "number",
+							placeholder: "计数器",
+							showLabel: true,
+							controls: true,
+							step: 1,
+							showRule: "badge_type==number"
 						}
+
 						],
 						// 表单验证规则
 						rules: {
