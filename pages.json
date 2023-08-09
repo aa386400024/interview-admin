@@ -10,7 +10,9 @@
 			}
 		},
 		{ "path": "pages/user/list" },
-		{ "path": "pages/iv-question-manager/list" }
+		{ "path": "pages/iv-question-manager/list" },
+		{ "path": "pages/iv-industries-manager/list" },
+		{ "path": "pages/iv-positions-manager/list" }
 	],
 	"subPackages": [{
 			"root": "pages_plugs",

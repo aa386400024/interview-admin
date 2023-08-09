@@ -467,7 +467,16 @@
 				that.form1.props.formType = 'update';
 				that.form1.props.title = '编辑';
 				that.form1.props.show = true;
-				that.form1.data = item;
+				// 转换item的数据结构以匹配表单的数据结构
+				let formData = {
+					...item,
+					industries_positions: [item.industry_id, item.position_id],
+					skills: item.skills.map(skill => skill.name),
+					level: (item.skills && item.skills[0]) ? item.skills[0].proficiency_level : '', // 假设所有技能的proficiency_level都是相同的
+					// 如果有其他字段需要转换，可以在这里继续添加
+				};
+			
+				that.form1.data = formData;
 			},
 			// 删除按钮
 			deleteBtn({
