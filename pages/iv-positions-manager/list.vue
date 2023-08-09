@@ -183,11 +183,7 @@
 							key: "position_id",
 							title: "职位ID",
 							type: "text",
-						},
-						{
-							key: "industry_id",
-							title: "行业ID",
-							type: "text",
+							width: 120
 						},
 						{
 							key: "industry_name",
@@ -196,6 +192,11 @@
 							formatter: (val, row, column, index) => {
 								return row.industry ? row.industry.name : '未知'; // 从职位的industry属性中提取行业名称
 							}
+						},
+						{
+							key: "industry_id",
+							title: "行业ID",
+							type: "text",
 						},
 						{
 							key: "description",
@@ -272,7 +273,6 @@
 				form1: {
 					// 表单请求数据，此处可以设置默认值
 					data: {
-						"position_id": "",
 						"name": "",
 						"description": "",
 						"name_en": "",
@@ -287,12 +287,6 @@
 						action: "",
 						// 表单字段显示规则
 						columns: [{
-							"key": "position_id",
-							"title": "职位ID",
-							"type": "text",
-							"disabled": true,
-							"showLabel": true
-						}, {
 							"key": "name",
 							"title": "职位名称",
 							"type": "text",
