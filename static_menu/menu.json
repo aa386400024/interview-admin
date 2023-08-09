@@ -77,6 +77,11 @@
 			"name": "行业管理",
 			"icon": "vk-icon-text",
 			"url": "/pages/iv-industries-manager/list"
+		},{
+			"menu_id": "my_system-iv-positions-manager",
+			"name": "职位管理",
+			"icon": "vk-icon-text",
+			"url": "/pages/iv-positions-manager/list"
 		}]
 	}
 ]
