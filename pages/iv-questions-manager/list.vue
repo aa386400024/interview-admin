@@ -106,7 +106,7 @@
 				// 表格相关开始 -----------------------------------------------------------
 				table1: {
 					// 表格数据请求地址
-					action: "admin/iv-question-manager/sys/getList",
+					action: "admin/iv-questions-manager/sys/getList",
 					// 表格字段显示规则
 					columns: [{
 							key: "_id",
@@ -242,7 +242,7 @@
 								"maxRows": 4
 							}
 						}, {
-							"action": "admin/iv-question-manager/sys/getIndustryAndPositions",
+							"action": "admin/iv-questions-manager/sys/getIndustryAndPositions",
 							"key": "industries_positions",
 							"title": "行业/职位",
 							"type": "cascader",
@@ -456,14 +456,14 @@
 			// 显示添加页面
 			addBtn() {
 				that.resetForm();
-				that.form1.props.action = 'admin/iv-question-manager/sys/add';
+				that.form1.props.action = 'admin/iv-questions-manager/sys/add';
 				that.form1.props.formType = 'add';
 				that.form1.props.title = '添加';
 				that.form1.props.show = true;
 			},
 			// 显示修改页面
 			updateBtn({ item }) {
-				that.form1.props.action = 'admin/iv-question-manager/sys/update';
+				that.form1.props.action = 'admin/iv-questions-manager/sys/update';
 				that.form1.props.formType = 'update';
 				that.form1.props.title = '编辑';
 				that.form1.props.show = true;
@@ -484,7 +484,7 @@
 				deleteFn
 			}) {
 				deleteFn({
-					action: "admin/iv-question-manager/sys/delete",
+					action: "admin/iv-questions-manager/sys/delete",
 					data: {
 						_id: item._id
 					},
