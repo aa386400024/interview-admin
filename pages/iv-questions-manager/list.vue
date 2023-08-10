@@ -40,6 +40,12 @@
 		</view>
 		<!-- 自定义按钮区域结束 -->
 
+		<!-- 视频播放器 -->
+		<view class="video-container" v-if="showVideoPlayer">
+			<video ref="videoPlayer" controls></video>
+			<view class="close-btn" @click="closeVideoPlayer">X</view>
+		</view>
+		
 		<!-- 表格组件开始 -->
 		<vk-data-table 
 			ref="table1" 
@@ -54,7 +60,11 @@
 			@delete="deleteBtn" 
 			@current-change="currentChange"
 			@selection-change="selectionChange"
-		></vk-data-table>
+		>
+			<template v-slot:video_url="{ row }">
+				<a href="javascript:;" @click="playVideo(row.video_url)">查看视频</a>
+			</template>
+		</vk-data-table>
 		<!-- 表格组件结束 -->
 
 		<!-- 添加或编辑的弹窗开始 -->
@@ -97,6 +107,7 @@
 		data() {
 			// 页面数据变量
 			return {
+				showVideoPlayer: false,
 				// 页面是否请求中或加载中
 				loading: false,
 				// init请求返回的数据
@@ -121,12 +132,6 @@
 							width: 200
 						},
 						{
-							key: "level",
-							title: "级别",
-							type: "text",
-							defaultValue: '未设置'
-						},
-						{
 							key: "industry_name",
 							title: "行业",
 							type: "text",
@@ -139,10 +144,16 @@
 							defaultValue: '未设置'
 						},
 						{
+							key: "level",
+							title: "级别",
+							type: "text",
+							defaultValue: '未设置'
+						},
+						{
 						  key: "skills",
 						  title: "技能",
 						  type: "html",
-						  width: 200,
+						  width: 150,
 						  formatter: (val, row, column, index) => {
 						    return val.map(skill => {
 						      return `<el-tag>${skill.name} (${skill.proficiency_level})</el-tag>`;
@@ -150,12 +161,13 @@
 						  }
 						},
 						{
+						    key: "video_url",
+						    title: "视频链接",
+						},
+						{
 						  key: "video_id",
 						  title: "视频ID",
-						  type: "html",
-						  formatter: (val) => {
-						    return `<a href="https://www.youtube.com/watch?v=${val}" target="_blank">${val}</a>`;
-						  }
+						  type: "text"
 						}
 					],
 					// 多选框选中的值
@@ -173,46 +185,36 @@
 
 					},
 					// 查询表单的字段规则 fieldName:指定数据库字段名,不填默认等于key
-					columns: [{
-							key: "_id",
-							title: "ID",
+					columns: [
+						{
+							key: "question_text",
+							title: "面试问题",
 							type: "text",
-							width: 140,
-							mode: "="
+							width: 200,
+							mode: "%%"
 						},
 						{
-							key: "username",
-							title: "用户名",
+							key: "industry_name",
+							title: "行业",
 							type: "text",
 							width: 140,
 							mode: "%%"
 						},
 						{
-							key: "nickname",
-							title: "昵称",
+							key: "position_name",
+							title: "职位",
 							type: "text",
 							width: 140,
 							mode: "%%"
 						},
 						{
-							key: "mobile",
-							title: "手机号",
+							key: "level",
+							title: "级别",
 							type: "text",
 							width: 140,
 							mode: "%%"
 						},
-						{
-							key: "register_date",
-							title: "注册时间",
-							type: "datetimerange",
-							width: 400,
-							mode: "[]"
-						},
-						{
-							key: "allow_login_background",
-							hidden: true,
-							mode: "="
-						},
+					// ... 保留其他字段
 					]
 				},
 				
@@ -418,6 +420,23 @@
 			init(options) {
 				originalForms["form1"] = vk.pubfn.copyObject(that.form1);
 			},
+			playVideo(videoUrl) {
+			    this.showVideoPlayer = true;
+			    this.$nextTick(() => {
+			        const videoPlayer = this.$refs.videoPlayer;
+			        if (videoPlayer) {
+			            videoPlayer.src = videoUrl;
+			            videoPlayer.play();
+			        } else {
+			            console.error("videoPlayer ref is not defined!");
+			        }
+			    });
+			},
+			closeVideoPlayer() {
+				this.showVideoPlayer = false;
+				const videoPlayer = this.$refs.videoPlayer;
+				videoPlayer.pause();
+			},
 			formSuccess() {
 				console.log("表单提交了");
 				this.form1.props.show = false;
@@ -520,7 +539,27 @@
 	};
 </script>
 <style lang="scss" scoped>
-	.page-body {}
+	.page-body {
+		.video-container {
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			z-index: 1000;
+			background-color: rgba(0, 0, 0, 0.7);
+			padding: 10px;
+			border-radius: 10px;
+		}
+		.close-btn {
+			position: absolute;
+			right: 10px;
+			top: 10px;
+			background-color: #fff;
+			padding: 5px 10px;
+			border-radius: 50%;
+			cursor: pointer;
+		}
+	}
 	.el-upload__tip {
 		line-height: 1.2;
 	}
