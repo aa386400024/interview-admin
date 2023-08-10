@@ -299,12 +299,13 @@
 						}, {
 							"key": "video_file",
 							"title": "视频上传",
-							"type": "image",
+							"type": "file",
 							"showLabel": true,
-							"limit": 9,
+							"limit": 1,
 							"listType": "picture",
 							"fileSize": 10,
-							"sizeUnit": "MB"
+							"sizeUnit": "MB",
+							"accept": ".mp4"
 						}, {
 							"key": "video_title",
 							"title": "视频标题",
