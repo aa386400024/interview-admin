@@ -71,7 +71,7 @@
 			"menu_id": "my_system-iv-question-manager",
 			"name": "面试题库",
 			"icon": "vk-icon-text",
-			"url": "/pages/iv-question-manager/list"
+			"url": "/pages/iv-questions-manager/list"
 		},{
 			"menu_id": "my_system-iv-industries-manager",
 			"name": "行业管理",
@@ -82,6 +82,16 @@
 			"name": "职位管理",
 			"icon": "vk-icon-text",
 			"url": "/pages/iv-positions-manager/list"
+		},{
+			"menu_id": "my_system-iv-videos-manager",
+			"name": "视频管理",
+			"icon": "vk-icon-text",
+			"url": "/pages/iv-videos-manager/list"
+		},{
+			"menu_id": "my_system-iv-interviews-manager",
+			"name": "面试管理",
+			"icon": "vk-icon-text",
+			"url": "/pages/iv-interviews-manager/list"
 		}]
 	}
 ]
