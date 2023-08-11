@@ -42,7 +42,7 @@
 
 		<!-- 视频播放器 -->
 		<view class="video-container" v-if="showVideoPlayer">
-			<video ref="videoPlayer" controls></video>
+			<video ref="videoPlayer" :src="videoSrc" controls></video>
 			<view class="close-btn" @click="closeVideoPlayer">X</view>
 		</view>
 		
@@ -108,6 +108,7 @@
 			// 页面数据变量
 			return {
 				showVideoPlayer: false,
+				videoSrc: '',
 				// 页面是否请求中或加载中
 				loading: false,
 				// init请求返回的数据
@@ -422,6 +423,7 @@
 			},
 			playVideo(videoUrl) {
 			    this.showVideoPlayer = true;
+				this.videoSrc = videoUrl;
 			    this.$nextTick(() => {
 			        const videoPlayer = this.$refs.videoPlayer;
 			        if (videoPlayer) {
@@ -539,28 +541,33 @@
 	};
 </script>
 <style lang="scss" scoped>
-	.page-body {
-		.video-container {
-			position: fixed;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
-			z-index: 1000;
-			background-color: rgba(0, 0, 0, 0.7);
-			padding: 10px;
-			border-radius: 10px;
-		}
-		.close-btn {
-			position: absolute;
-			right: 10px;
-			top: 10px;
-			background-color: #fff;
-			padding: 5px 10px;
-			border-radius: 50%;
-			cursor: pointer;
-		}
+.page-body {
+	padding: 20px;
+}
+.video-container {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.7);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1000;
+	video {
+		max-width: 80%;
+		max-height: 80%;
 	}
-	.el-upload__tip {
-		line-height: 1.2;
+	.close-btn {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		background-color: #fff;
+		padding: 5px 10px;
+		border-radius: 5px;
+		cursor: pointer;
 	}
+}
+
 </style>

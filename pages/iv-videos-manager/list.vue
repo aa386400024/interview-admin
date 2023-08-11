@@ -1,16 +1,6 @@
 <template>
 	<view class="page-body">
 		<!-- 页面内容开始 -->
-		<!-- 职位弹窗 -->
-		<vk-data-dialog 
-		    v-model="isPositionsDialogVisible" 
-		    title="职位列表" 
-		    width="60%">
-		    <vk-data-table
-		        :data="selectedPositions"
-		        :columns="positionTable.columns">
-		    </vk-data-table>
-		</vk-data-dialog>
 
 		<!-- 表格搜索组件开始 -->
 		<vk-data-table-query v-model="queryForm1.formData" :columns="queryForm1.columns"
@@ -25,7 +15,7 @@
 					size="small" 
 					icon="el-icon-circle-plus-outline" 
 					@click="addBtn"
-				>添加</el-button>
+				>添加视频</el-button>
 				<!-- 批量操作 -->
 				<el-dropdown 
 					v-if="table1.multipleSelection" 
@@ -42,22 +32,27 @@
 						批量操作<i class="el-icon-arrow-down el-icon--right"></i>
 					</el-button>
 					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item :command="1">批量操作1</el-dropdown-item>
-						<el-dropdown-item :command="2">批量操作2</el-dropdown-item>
+						<el-dropdown-item :command="1">批量删除</el-dropdown-item>
+						<el-dropdown-item :command="2">批量下载</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
 			</el-row>
 		</view>
 		<!-- 自定义按钮区域结束 -->
 
+		<!-- 视频播放器 -->
+		<view class="video-container" v-if="showVideoPlayer">
+			<video ref="videoPlayer" :src="videoSrc" controls></video>
+			<view class="close-btn" @click="closeVideoPlayer">X</view>
+		</view>
+		
 		<!-- 表格组件开始 -->
-		<vk-data-table
-			ref="table1"
+		<vk-data-table 
+			ref="table1" 
 			:action="table1.action" 
 			:columns="table1.columns" 
 			:query-form-param="queryForm1"
-			:right-btns="['detail_auto','update','delete']"
-			:default-sort="{ name:'position_id', type:'asc' }"
+			:right-btns="['detail_auto','update','delete']" 
 			:selection="true" 
 			:row-no="true" 
 			:pagination="true"
@@ -65,7 +60,11 @@
 			@delete="deleteBtn" 
 			@current-change="currentChange"
 			@selection-change="selectionChange"
-		></vk-data-table>
+		>
+			<template v-slot:video_url="{ row }">
+				<a href="javascript:;" @click="playVideo(row.video_url)">查看视频</a>
+			</template>
+		</vk-data-table>
 		<!-- 表格组件结束 -->
 
 		<!-- 添加或编辑的弹窗开始 -->
@@ -78,7 +77,7 @@
 		>
 			<vk-data-form 
 				ref="form1" 
-				v-model="form1.data"
+				v-model="form1.data" 
 				:rules="form1.props.rules" 
 				:action="form1.props.action"
 				:form-type="form1.props.formType" 
@@ -108,129 +107,66 @@
 		data() {
 			// 页面数据变量
 			return {
-				selectedPositions: [], // 用于存储当前选中的职位列表
-				isPositionsDialogVisible: false, // 控制职位对话框的显示/隐藏
+				showVideoPlayer: false,
+				videoSrc: '',
 				// 页面是否请求中或加载中
 				loading: false,
 				// init请求返回的数据
 				data: {},
-				positionTable: {
-					columns: [
-						{
-							key: "name",
-							title: "职位名称",
-							type: "text"
-						},
-						{
-							key: "name_en",
-							title: "职位英文名称",
-							type: "text"
-						},
-						{
-							key: "position_id",
-							title: "职位ID",
-							type: "text"
-						},
-						{
-							key: "interviewed_count",
-							title: "面试次数",
-							type: "text"
-						},
-						{
-							key: "requires_proficiency",
-							title: "技能熟练度要求",
-							type: "text",
-							formatter: (val, row, column, index) => {
-								const text = val ? '需要' : '不需要'
-								return text;
-							}
-						},
-						{
-							key: "requires_skills",
-							title: "技能要求",
-							type: "text",
-							formatter: (val, row, column, index) => {
-								const text = val ? '需要' : '不需要'
-								return text;
-							}
-						},
-					]
-				},
 				// 表格相关开始 -----------------------------------------------------------
 				table1: {
 					// 表格数据请求地址
-					action: "admin/iv-positions-manager/sys/getList",
+					action: "admin/iv-videos-manager/sys/getList",
 					// 表格字段显示规则
 					columns: [{
 							key: "_id",
 							title: "id",
 							type: "text",
+							width: 100
+						},
+						{
+							key: "title",
+							title: "视频标题",
+							type: "text",
 							width: 200
 						},
+						
 						{
-							key: "name",
-							title: "职位名称",
-							type: "text",
-							width: 120
-						},
-						{
-							key: "name_en",
-							title: "职位英文名称",
-							type: "text",
-							width: 120
-						},
-						{
-							key: "position_id",
-							title: "职位ID",
-							type: "text",
-							width: 120
-						},
-						{
-							key: "industry_name",
-							title: "行业名称",
-							type: "text",
-							formatter: (val, row, column, index) => {
-								return row.industry ? row.industry.name : '未知'; // 从职位的industry属性中提取行业名称
-							}
-						},
-						{
-							key: "industry_id",
-							title: "行业ID",
-							type: "text",
-						},
-						{
-							key: "description",
-							title: "职位描述",
+							key: "duration",
+							title: "视频时长",
 							type: "text",
 							defaultValue: '未设置'
 						},
-						// {
-						// 	key: "icon",
-						// 	title: "职位图标",
-						// 	type: "icon",
-						// },
 						{
-							key: "interviewed_count",
-							title: "面试次数",
-							type: "text"
+							key: "video_url",
+							title: "视频链接",
 						},
 						{
-							key: "requires_proficiency",
-							title: "技能熟练度要求",
-							type: "text",
-							formatter: (val, row, column, index) => {
-								const text = val ? '需要' : '不需要'
-								return text;
-							}
+						    key: "industry_name",
+						    title: "所属行业",
+						    type: "text"
 						},
 						{
-							key: "requires_skills",
-							title: "技能要求",
+						    key: "position_name",
+						    title: "所属职位",
+						    type: "text"
+						},
+						{
+						    key: "character_name",
+						    title: "视频角色",
+						    type: "text"
+						},
+						{
+							key: "language_name",
+							title: "视频语言",
 							type: "text",
-							formatter: (val, row, column, index) => {
-								const text = val ? '需要' : '不需要'
-								return text;
-							}
+							defaultValue: '未设置'
+						},
+						{
+							key: "question_id",
+							title: "问题ID",
+							type: "text",
+							defaultValue: '未设置'
 						},
 					],
 					// 多选框选中的值
@@ -239,183 +175,91 @@
 					selectItem: ""
 				},
 				// 表格相关结束 -----------------------------------------------------------
-				
 				// 表单相关开始 -----------------------------------------------------------
 				// 查询表单请求数据
 				queryForm1: {
-						// 查询表单数据源，可在此设置默认值
-						formData: {},
-						// 查询表单的字段规则 fieldName:指定数据库字段名,不填默认等于key
-						columns: [{
-								key: "_id",
-								title: "ID",
-								type: "text",
-								width: 140,
-								mode: "="
-							},
-							{
-								key: "name",
-								title: "职位名称",
-								type: "text",
-								width: 140,
-								mode: "%%"
-							},
-							{
-								key: "description",
-								title: "职位描述",
-								type: "text",
-								width: 140,
-								mode: "%%"
-							}
-						]
-					},
+					// 查询表单数据源，可在此设置默认值
+					formData: {},
+					// 查询表单的字段规则 fieldName:指定数据库字段名,不填默认等于key
+					columns: [
+						{
+							key: "video_title",
+							title: "视频标题",
+							type: "text",
+							width: 200,
+							mode: "%%"
+						},
+						{
+							key: "video_description",
+							title: "视频描述",
+							type: "text",
+							width: 140,
+							mode: "%%"
+						}
+					]
+				},
 				
 				form1: {
 					// 表单请求数据，此处可以设置默认值
 					data: {
-						"name": "",
-						"description": "",
-						"name_en": "",
-						"icon": "",
-						"industry_id": "",
-						"requires_proficiency": false,
-						"requires_skills": false,
+						"video_file": null,
+						"video_title": "",
+						"video_duration": ""
 					},
 					// 表单属性
 					props: {
 						// 表单提交地址
-						action: "",
+						action: 'admin/iv-videos-manager/sys/add',
 						// 表单字段显示规则
 						columns: [{
-							"key": "name",
-							"title": "职位名称",
+							"key": "video_title",
+							"title": "视频标题",
 							"type": "text",
-							"placeholder": "请输入职位名称",
-							"showLabel": true
-						}, {
-							"key": "name_en",
-							"title": "职位英文名称",
-							"type": "text",
-							"placeholder": "请输入职位英文名称",
-							"showLabel": true
-						}, {
-							"key": "description",
-							"title": "职位描述",
-							"type": "textarea",
-							"placeholder": "请输入职位描述",
-							"showLabel": true,
-							"autosize": {
-								"minRows": 4,
-								"maxRows": 4
-							}
-						}, {
-							"key": "icon",
-							"title": "职位图标",
-							"type": "text",
-							"placeholder": "请输入职位图标",
-							"showLabel": true
-						}, { 
-							"action": "admin/iv-positions-manager/sys/getIndustriesList",
-							"key": "industry_id",
-							"title": "所属行业",
-							"type": "remote-select",
-							"placeholder": "请选择所属行业",
-							"props": { list: "rows", value: "value", label: "label" },
-							"showAll": true,
-							"actionData": {
-							    pageSize: 1000
-							}
-						}, {
-							"key": "requires_proficiency",
-							"title": "技能熟练度要求",
-							"type": "switch",
-							"showLabel": true
-						}, {
-							"key": "requires_skills",
-							"title": "技能要求",
-							"type": "switch",
-							"showLabel": true
-						}
-						],
+							"required": true
+						},{
+							"key": "video_file",
+							"title": "上传视频",
+							"type": "file",
+							"required": true
+						}],
 						// 表单验证规则
 						rules: {
-							"name": [{
-								"required": true,
-								"message": "职位名称不能为空",
-								"trigger": "change"
+							"video_title": [{
+								required: true,
+								message: '请输入视频标题',
+								trigger: 'blur'
 							}],
-							"name_en": [{
-							    "required": true,
-							    "message": "职位英文名称不能为空",
-							    "trigger": "change"
-							}],
-							"icon": [{
-							    "required": true,
-							    "message": "职位图标不能为空",
-							    "trigger": "change"
-							}],
-							"industry_id": [{
-							    "required": true,
-							    "message": "所属行业不能为空",
-							    "trigger": "change"
-							}],
-							"description": [{
-								"required": true,
-								"message": "职位描述不能为空",
-								"trigger": "change"
+							"video_file": [{
+								required: true,
+								message: '请上传视频文件',
+								trigger: 'blur'
 							}]
 						},
-						// 自定义表单类型，如：add 代表添加 update 代表修改，可以为空
-						formType: "",
-						// 是否显示表单的弹窗
+						// 表单是否显示
 						show: false,
-						// 表单是否在请求中
+						// 表单标题
+						title: '添加视频',
+						// 表单类型，add:添加，update:修改
+						formType: 'add',
+						// 表单是否加载中
 						loading: false
-					},
-				},
-				// 其他弹窗表单
-				formDatas: {},
+					}
+				}
 				// 表单相关结束 -----------------------------------------------------------
 			};
 		},
-		// 监听 - 页面每次【加载时】执行(如：前进)
-		onLoad(options = {}) {
+		onLoad() {
 			that = this;
-			vk = that.vk;
-			that.options = options;
-			that.init(options);
+			that.init();
 		},
-		// 监听 - 页面【首次渲染完成时】执行。注意如果渲染速度快，会在页面进入动画完成前触发
-		onReady() {},
-		// 监听 - 页面每次【显示时】执行(如：前进和返回) (页面每次出现在屏幕上都触发，包括从下级页面点返回露出当前页面)
-		onShow() {},
-		// 监听 - 页面每次【隐藏时】执行(如：返回)
-		onHide() {},
-		// 函数
 		methods: {
-			// 页面数据初始化函数
+			// 页面初始化
 			init(options) {
 				originalForms["form1"] = vk.pubfn.copyObject(that.form1);
 			},
-			formSuccess() {
-				console.log("表单提交了");
-				this.form1.props.show = false;
-				this.refresh();
-			},
-			onCancel() {
-				console.log("关闭了");
-			},
-			// 页面跳转
-			pageTo(path) {
-				vk.navigateTo(path);
-			},
-			// 表单重置
-			resetForm() {
-				vk.pubfn.resetForm(originalForms, that);
-			},
-			// 搜索
+			// 查询表单搜索
 			search() {
-				that.$refs.table1.search();
+				that.$refs.table1.load();
 			},
 			// 刷新
 			refresh() {
@@ -429,65 +273,109 @@
 			currentChange(val) {
 				that.table1.selectItem = val;
 			},
-			// 当选择项发生变化时会触发该事件
-			selectionChange(list) {
-				that.table1.multipleSelection = list;
-			},
-			// 显示添加页面
+			// 添加按钮
 			addBtn() {
 				that.resetForm();
-				that.form1.props.action = 'admin/iv-positions-manager/sys/add';
+				that.form1.props.action = 'admin/iv-videos-manager/sys/add';
 				that.form1.props.formType = 'add';
-				that.form1.props.title = '添加';
+				that.form1.props.title = '添加视频';
 				that.form1.props.show = true;
 			},
-			// 显示修改页面
+			// 修改按钮
 			updateBtn({ item }) {
-				that.form1.props.action = 'admin/iv-positions-manager/sys/update';
+				that.form1.props.action = 'admin/iv-videos-manager/sys/update';
 				that.form1.props.formType = 'update';
-				that.form1.props.title = '编辑';
+				that.form1.props.title = '编辑视频';
 				that.form1.props.show = true;
-				that.form1.data = item;
+				let formData = {
+					...item
+				};
+				that.form1.data = formData;
 			},
 			// 删除按钮
 			deleteBtn({ item, deleteFn }) {
 				deleteFn({
-					action: "admin/iv-positions-manager/sys/delete",
+					action: "admin/iv-videos-manager/sys/delete",
 					data: {
 						_id: item._id
-					},
+					}
 				});
 			},
-			// 监听 - 批量操作的按钮点击事件
-			batchBtn(index) {
-				switch (index) {
-					case 1:
-						vk.toast("批量操作按钮1");
-						break;
-					case 2:
-						vk.toast("批量操作按钮2");
-						break;
-					default:
-						break;
+			// 批量操作
+			batchBtn(command) {
+				if (command === '1') {
+					// 批量删除逻辑
+				} else if (command === '2') {
+					// 批量下载逻辑
 				}
 			},
-			showPositions(index) {
-				this.selectedPositions = this.table1.columns[index].positions;
-				this.isPositionsDialogVisible = true;
-			}
-		},
-		// 监听属性
-		watch: {},
-		// 过滤器
-		filters: {},
-		// 计算属性
-		computed: {}
+			// 表单提交成功
+			formSuccess() {
+				that.form1.props.show = false;
+				that.$refs.table1.load();
+				this.refresh();
+			},
+			// 表单取消
+			onCancel() {
+				that.form1.props.show = false;
+			},
+			// 重置表单
+			resetForm() {
+				that.form1.data = JSON.parse(JSON.stringify(originalForms.form1));
+			},
+			playVideo(videoUrl) {
+			    this.showVideoPlayer = true;
+				this.videoSrc = videoUrl;
+			    this.$nextTick(() => {
+			        const videoPlayer = this.$refs.videoPlayer;
+			        if (videoPlayer) {
+			            videoPlayer.src = videoUrl;
+			            setTimeout(() => {
+			                videoPlayer.play();
+			            }, 500); // 延迟100毫秒
+			        } else {
+			            console.error("videoPlayer ref is not defined!");
+			        }
+			    });
+			},
+
+			// 关闭视频播放器
+			closeVideoPlayer() {
+				this.showVideoPlayer = false;
+				const videoPlayer = this.$refs.videoPlayer;
+				videoPlayer.pause();
+			},
+		}
 	};
 </script>
 
 <style lang="scss" scoped>
-    .page-body {}
-    .el-upload__tip {
-        line-height: 1.2;
-    }
+	.page-body {
+		padding: 20px;
+	}
+	.video-container {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.7);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		z-index: 1000;
+		video {
+			max-width: 80%;
+			max-height: 80%;
+		}
+		.close-btn {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			background-color: #fff;
+			padding: 5px 10px;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+	}
 </style>
