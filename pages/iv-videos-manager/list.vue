@@ -130,13 +130,6 @@
 							type: "text",
 							width: 200
 						},
-						
-						{
-							key: "duration",
-							title: "视频时长",
-							type: "text",
-							defaultValue: '未设置'
-						},
 						{
 							key: "video_url",
 							title: "视频链接",
@@ -189,13 +182,6 @@
 							width: 200,
 							mode: "%%"
 						},
-						{
-							key: "video_description",
-							title: "视频描述",
-							type: "text",
-							width: 140,
-							mode: "%%"
-						}
 					]
 				},
 				

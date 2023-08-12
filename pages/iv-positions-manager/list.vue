@@ -84,7 +84,7 @@
 				:form-type="form1.props.formType" 
 				:columns='form1.props.columns' 
 				:loading.sync="form1.props.loading"
-				:label-width="100" 
+				:label-width="120" 
 				width="100%" 
 				label-position="right" 
 				size="medium" 
@@ -204,11 +204,6 @@
 							type: "text",
 							defaultValue: '未设置'
 						},
-						// {
-						// 	key: "icon",
-						// 	title: "职位图标",
-						// 	type: "icon",
-						// },
 						{
 							key: "interviewed_count",
 							title: "面试次数",
@@ -231,6 +226,13 @@
 								const text = val ? '需要' : '不需要'
 								return text;
 							}
+						},
+						{
+							key: "image_url", 
+							title: "图片", 
+							type: "image", 
+							width: 120, 
+							imageWidth:40 ,
 						},
 					],
 					// 多选框选中的值
@@ -301,20 +303,20 @@
 						}, {
 							"key": "description",
 							"title": "职位描述",
-							"type": "textarea",
+							"type": "text",
 							"placeholder": "请输入职位描述",
 							"showLabel": true,
-							"autosize": {
-								"minRows": 4,
-								"maxRows": 4
-							}
 						}, {
-							"key": "icon",
-							"title": "职位图标",
-							"type": "text",
-							"placeholder": "请输入职位图标",
-							"showLabel": true
-						}, { 
+							"key": "image_file",
+							"title": "职位图片",
+							"type": "image",
+							"showLabel": true,
+							"limit": 1,
+							"listType": "picture-card",
+							"fileSize": 10,
+							"sizeUnit": "MB",
+							"accept": ".png"
+						},{ 
 							"action": "admin/iv-positions-manager/sys/getIndustriesList",
 							"key": "industry_id",
 							"title": "所属行业",
@@ -347,11 +349,6 @@
 							"name_en": [{
 							    "required": true,
 							    "message": "职位英文名称不能为空",
-							    "trigger": "change"
-							}],
-							"icon": [{
-							    "required": true,
-							    "message": "职位图标不能为空",
 							    "trigger": "change"
 							}],
 							"industry_id": [{
@@ -443,12 +440,14 @@
 			},
 			// 显示修改页面
 			updateBtn({ item }) {
-				that.form1.props.action = 'admin/iv-positions-manager/sys/update';
-				that.form1.props.formType = 'update';
-				that.form1.props.title = '编辑';
-				that.form1.props.show = true;
-				that.form1.data = item;
+			    that.form1.props.action = 'admin/iv-positions-manager/sys/update';
+			    that.form1.props.formType = 'update';
+			    that.form1.props.title = '编辑';
+			    that.form1.props.show = true;
+			    that.form1.data = item;
+			    that.form1.data.image_file = item.image_url; // 设置image_file字段为职位的image_url
 			},
+
 			// 删除按钮
 			deleteBtn({ item, deleteFn }) {
 				deleteFn({

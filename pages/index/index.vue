@@ -3,25 +3,25 @@
 		<!-- 页面内容开始 -->
 
 		这里是后台首页
-    
+
 		<!-- 页面内容结束 -->
 	</view>
 </template>
 
 <script>
-	var that;													// 当前页面对象
-	var vk = uni.vk;									// vk实例
-	
+	var that; // 当前页面对象
+	var vk = uni.vk; // vk实例
+
 	export default {
 		data() {
 			// 页面数据变量
 			return {
 				// init请求返回的数据
-				data:{
+				data: {
 
 				},
 				// 表单请求数据
-				form1:{
+				form1: {
 
 				}
 			}
@@ -34,7 +34,7 @@
 			that.init(options);
 		},
 		// 监听 - 页面【首次渲染完成时】执行。注意如果渲染速度快，会在页面进入动画完成前触发
-		onReady(){
+		onReady() {
 
 		},
 		// 监听 - 页面每次【显示时】执行(如：前进和返回) (页面每次出现在屏幕上都触发，包括从下级页面点返回露出当前页面)
@@ -50,30 +50,30 @@
 		// 函数
 		methods: {
 			// 页面数据初始化函数
-			init(options){
-				
-			
+			init(options) {
+
+
 			},
-			pageTo(path){
+			pageTo(path) {
 				vk.navigateTo(path);
 			},
-      load(e){
-        console.log(1,e);
-      },
-      error(e){
-        console.log(2,e);
-      }
+			load(e) {
+				console.log(1, e);
+			},
+			error(e) {
+				console.log(2, e);
+			}
 		},
 		// 过滤器
-		filters:{
+		filters: {
 
 		},
 		// 计算属性
-		computed:{
+		computed: {
 
 		}
 	}
 </script>
 <style lang="scss" scoped>
-	
+
 </style>
