@@ -73,119 +73,34 @@
 							width: 200
 						},
 						{
-							key: "avatar",
-							title: "头像",
-							type: "avatar",
-							width: 80
-						},
-						{
-							key: "username",
-							title: "用户名",
+							key: "points",
+							title: "积分",
 							type: "text",
-							defaultValue: '未设置'
 						},
 						{
-							key: "nickname",
-							title: "昵称",
+							key: "balance",
+							title: "余额",
 							type: "text",
-							defaultValue: '未设置'
 						},
 						{
-							key: "comment",
-							title: "备注",
+							key: "membership_level",
+							title: "会员等级",
+							type: "text",
+						},
+						{
+							key: "membership_expiry",
+							title: "会员到期日期",
 							type: "text"
 						},
 						{
-							key: "mobile",
-							title: "手机号",
+							key: "purchase_history",
+							title: "购买历史",
 							type: "text",
-							width: 120,
-							defaultValue: "未绑定"
 						},
 						{
-							key: "gender",
-							title: "性别",
-							type: "radio",
-							width: 80,
-							defaultValue: 0,
-							data: [{
-									value: 1,
-									label: "男"
-								},
-								{
-									value: 2,
-									label: "女"
-								},
-								{
-									value: 0,
-									label: "保密"
-								}
-							]
-						},
-						{
-							key: "status",
-							title: "账户状态",
-							type: "tag",
-							width: 120,
-							defaultValue: 0,
-							data: [{
-									value: 1,
-									label: "冻结",
-									tagType: "danger"
-								},
-								{
-									value: 0,
-									label: "正常",
-									tagType: "success"
-								}
-							]
-						},
-						{
-							key: "register_date",
-							title: "注册时间",
-							type: "time",
-							width: 160,
-							sortable: "custom"
-						},
-						{
-							key: "last_login_date",
-							title: "最后登录时间",
-							type: "dateDiff",
-							width: 130,
-							defaultValue: '从未登录过',
-							sortable: "custom"
-						},
-						{
-							key: "last_login_ip",
-							title: "最后登录ip",
+							key: "last_updated",
+							title: "最后更新时间",
 							type: "text",
-							width: 120,
-							defaultValue: '从未登录过'
-						},
-						{
-							key: "role",
-							title: "角色",
-							type: "text",
-							width: 120,
-							defaultValue: '无'
-						},
-						{
-							key: "allow_login_background",
-							title: "允许登录后台",
-							type: "tag",
-							width: 120,
-							defaultValue: false,
-							data: [{
-									value: true,
-									label: "允许",
-									tagType: "success"
-								},
-								{
-									value: false,
-									label: "禁止",
-									tagType: "danger"
-								}
-							]
 						}
 					],
 					// 多选框选中的值
