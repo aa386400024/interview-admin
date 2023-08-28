@@ -156,9 +156,7 @@
 						  type: "html",
 						  width: 150,
 						  formatter: (val, row, column, index) => {
-						    return val.map(skill => {
-						      return `<el-tag>${skill.name} (${skill.proficiency_level})</el-tag>`;
-						    }).join(' ');
+						      return val.join(",");
 						  }
 						},
 						{
