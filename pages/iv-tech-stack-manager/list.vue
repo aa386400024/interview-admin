@@ -167,17 +167,25 @@
 							type: "text",
 							width: 120
 						},
-						{
-							key: "position_name",
-							title: "所属职位",
-							type: "text",
-							width: 120
+						{ 
+							key: "position_names", 
+							title: "所属职位", 
+							type: "html", 
+							width: 150, 
+							size: "small",
+							formatter: (val, row, column, index) => {
+								let str = val.map(position => `<span class="tag ${position.tagType}">${position.label}</span>`).join(' ');
+								return str;
+							}
 						},
 						{
-							key: "position_id",
+							key: "position_ids",
 							title: "所属职位ID",
-							type: "text",
-							width: 120
+							type: "html",
+							width: 150,
+							formatter: (val, row, column, index) => {
+							    return val.join(",");
+							}
 						},
 						{
 							key: "description",
@@ -249,7 +257,14 @@
 							"placeholder": "请选择行业/职位",
 							"clearable": true,
 							"showLabel": true,
-							"separator": "/"
+							"separator": "/",
+							"props": {
+								"value": "value",
+								"label": "label",
+								"children": "children",
+								"multiple": true,
+								"checkStrictly": false
+							},
 						}, {
 							"key": "description",
 							"title": "职位技能描述",
@@ -413,4 +428,5 @@
     .el-upload__tip {
         line-height: 1.2;
     }
+
 </style>

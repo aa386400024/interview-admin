@@ -142,8 +142,8 @@
 							key: "position_name",
 							title: "职位",
 							type: "text",
-							defaultValue: '未设置'
-						},
+							defaultValue: '未设置',
+						}, 
 						{
 							key: "level",
 							title: "级别",
@@ -222,7 +222,8 @@
 				form1: {
 					// 表单请求数据，此处可以设置默认值
 					data: {
-						"industries_positions": ["001", "001-001-001"],
+						"industries_positions": [[ "001", "001-001-001" ]],
+						"style": "technical",
 						"skills": [],
 						"level": "beginner",
 						"video_file": null,
@@ -252,53 +253,48 @@
 							"placeholder": "请选择行业/职位",
 							"clearable": true,
 							"showLabel": true,
-							"separator": "/"
-						}, {
-							"key": "skills",
-							"title": "相关技能",
-							"type": "checkbox",
+							"separator": "/",
+							"props": {
+								"value": "value",
+								"label": "label",
+								"children": "children",
+								"multiple": true,
+								"checkStrictly": false
+							},
+						},{
+							"action": "admin/iv-questions-manager/sys/getStyleList",
+							"key": "style",
+							"title": "面试风格",
+							"type": "radio",
 							"showLabel": true,
-							"data": [{
-								"label": "html",
-								"value": "html"
-							}, {
-								"label": "css",
-								"value": "css"
-							}, {
-								"label": "js",
-								"value": "js"
-							}, {
-								"label": "vue",
-								"value": "vue"
-							}, {
-								"label": "react",
-								"value": "react"
-							}, {
-								"label": "angular",
-								"value": "angular"
-							}, {
-								"label": "webpack",
-								"value": "webpack"
-							}],
+							"size": "medium",
 							"optionType": "default",
-							"size": "medium"
+							"props": { list: "rows", value: "value", label: "name" }
 						}, {
+							"action": "admin/iv-questions-manager/sys/getLevelList",
 							"key": "level",
 							"title": "难度级别",
 							"type": "radio",
 							"showLabel": true,
-							"data": [{
-								"label": "初级",
-								"value": "beginner"
-							}, {
-								"label": "中级",
-								"value": "intermediate"
-							}, {
-								"label": "高级",
-								"value": "advanced"
-							}],
 							"size": "medium",
-							"optionType": "default"
+							"optionType": "default",
+							"props": { list: "rows", value: "value", label: "name" }
+						}, {
+							"action": "admin/iv-questions-manager/sys/getPositionsAndSkills",
+							"key": "skills",
+							"title": "相关技能",
+							"type": "cascader",
+							"placeholder": "请选择相关技能",
+							"clearable": true,
+							"showLabel": true,
+							"separator": "/",
+							"props": {
+								"value": "value",
+								"label": "label",
+								"children": "children",
+								"multiple": true,
+								"checkStrictly": false
+							},
 						}, {
 							"key": "video_file",
 							"title": "视频上传",
@@ -358,7 +354,7 @@
 								"trigger": "change"
 							}],
 							"skills": [{
-								"required": true,
+								"required": false,
 								"message": "相关技能不能为空",
 								"trigger": "change"
 							}],
