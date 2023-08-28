@@ -350,7 +350,7 @@
 							"question_text": [{
 								"required": true,
 								"message": "面试问题不能为空",
-								"trigger": "change"
+								"trigger": "blur"
 							}],
 							"industries_positions": [{
 								"required": true,
@@ -375,7 +375,7 @@
 							"video_title": [{
 								"required": true,
 								"message": "视频标题不能为空",
-								"trigger": "change"
+								"trigger": "blur"
 							}],
 							"video_character": [{
 								"required": true,

@@ -70,27 +70,32 @@
 		},{
 			"menu_id": "my_system-iv-question-manager",
 			"name": "面试题库",
-			"icon": "vk-icon-text",
+			"icon": "vk-icon-questionfill",
 			"url": "/pages/iv-questions-manager/list"
 		},{
 			"menu_id": "my_system-iv-industries-manager",
 			"name": "行业管理",
-			"icon": "vk-icon-text",
+			"icon": "vk-icon-ye",
 			"url": "/pages/iv-industries-manager/list"
 		},{
 			"menu_id": "my_system-iv-positions-manager",
 			"name": "职位管理",
-			"icon": "vk-icon-text",
+			"icon": "vk-icon-group_fill",
 			"url": "/pages/iv-positions-manager/list"
+		},{
+			"menu_id": "my_system-iv-tech-stack-manager",
+			"name": "职位技能管理",
+			"icon": "vk-icon-text",
+			"url": "/pages/iv-tech-stack-manager/list"
 		},{
 			"menu_id": "my_system-iv-videos-manager",
 			"name": "视频管理",
-			"icon": "vk-icon-text",
+			"icon": "vk-icon-videofill",
 			"url": "/pages/iv-videos-manager/list"
 		},{
 			"menu_id": "my_system-iv-interviews-manager",
 			"name": "面试管理",
-			"icon": "vk-icon-text",
+			"icon": "vk-icon-form_fill_light",
 			"url": "/pages/iv-interviews-manager/list"
 		}]
 	}

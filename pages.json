@@ -14,7 +14,8 @@
 		{ "path": "pages/iv-industries-manager/list" },
 		{ "path": "pages/iv-positions-manager/list" },
 		{ "path": "pages/iv-videos-manager/list" },
-		{ "path": "pages/iv-interviews-manager/list" }
+		{ "path": "pages/iv-interviews-manager/list" },
+		{ "path": "pages/iv-tech-stack-manager/list" }
 	],
 	"subPackages": [{
 			"root": "pages_plugs",
